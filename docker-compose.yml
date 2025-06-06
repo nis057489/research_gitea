@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: gitea
+      POSTGRES_USER: gitea
+      POSTGRES_PASSWORD: gitea_password
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+  gitea:
+    image: gitea/gitea:latest-rootless
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__DATABASE__DB_TYPE=postgres
+      - GITEA__DATABASE__HOST=db:5432
+      - GITEA__DATABASE__NAME=gitea
+      - GITEA__DATABASE__USER=gitea
+      - GITEA__DATABASE__PASSWD=gitea_password
+      - GITEA__SERVER__DOMAIN=192.168.100.20
+      - GITEA__SERVER__ROOT_URL=http://192.168.100.20:3000/
+      - LOCAL_ROOT_URL=http://192.168.100.20:3000/
+      - GITEA__SECURITY__INSTALL_LOCK=true
+      - GITEA__WORKFLOW__ENABLED=true
+    ports:
+      - "3000:3000"
+      - "2222:2222"
+    volumes:
+      - ./gitea:/var/lib/gitea
+
+  act_runner:
+    image: gitea/act_runner:latest
+    depends_on:
+      - gitea
+    environment:
+      - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
+      - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
+      - GITEA_RUNNER_NAME=docker-act-runner
+      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+volumes:
+  gitea-db-data:
+
+

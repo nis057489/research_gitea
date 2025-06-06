@@ -1,0 +1,5 @@
+data/
+gitea/
+pgdata/
+postgres/
+.runner
