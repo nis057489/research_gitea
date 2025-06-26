@@ -59,6 +59,42 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
+  act_runner-3:
+    image: gitea/act_runner:latest
+    depends_on:
+      - gitea
+    environment:
+      - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
+      - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
+      - GITEA_RUNNER_NAME=docker-act-runner-1
+      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+  act_runner-4:
+    image: gitea/act_runner:latest
+    depends_on:
+      - gitea
+    environment:
+      - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
+      - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
+      - GITEA_RUNNER_NAME=docker-act-runner-1
+      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+  act_runner-5:
+    image: gitea/act_runner:latest
+    depends_on:
+      - gitea
+    environment:
+      - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
+      - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
+      - GITEA_RUNNER_NAME=docker-act-runner-1
+      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
 
 volumes:
   gitea-db-data:
