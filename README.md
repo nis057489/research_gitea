@@ -440,7 +440,7 @@ If you need to harden it later:
 
 For most computational research workflows on internal networks, the default config is fine.
 
-# GPU Acceleration
+## GPU Acceleration
 
 To use NVIDIA GPU's your machine must have the `nvidia-container-toolkit` installed, so do that first. Then, uncomment the blocks in `docker-compose.yml` before starting the stack:
 
