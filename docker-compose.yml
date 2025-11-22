@@ -41,9 +41,16 @@ services:
       - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
       - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
       - GITEA_RUNNER_NAME=docker-act-runner-1
-      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+      - GITEA_RUNNER_LABELS=ubuntu-22.04-gpu:docker://nvidia/cuda:12.2.0-devel-ubuntu22.04,ubuntu-latest:docker://nvidia/cuda:12.2.0-devel-ubuntu22.04
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
     restart: always
   act_runner-2:
     image: gitea/act_runner:latest
@@ -53,9 +60,16 @@ services:
       - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
       - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
       - GITEA_RUNNER_NAME=docker-act-runner-2
-      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+      - GITEA_RUNNER_LABELS=ubuntu-22.04-gpu:docker://nvidia/cuda:12.2.0-devel-ubuntu22.04,ubuntu-latest:docker://nvidia/cuda:12.2.0-devel-ubuntu22.04
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
     restart: always
   act_runner-3:
     image: gitea/act_runner:latest
@@ -64,10 +78,17 @@ services:
     environment:
       - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
       - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
-      - GITEA_RUNNER_NAME=docker-act-runner-1
-      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+      - GITEA_RUNNER_NAME=docker-act-runner-3
+      - GITEA_RUNNER_LABELS=ubuntu-22.04-gpu:docker://nvidia/cuda:12.2.0-devel-ubuntu22.04,ubuntu-latest:docker://nvidia/cuda:12.2.0-devel-ubuntu22.04
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
     restart: always
   act_runner-4:
     image: gitea/act_runner:latest
@@ -76,10 +97,17 @@ services:
     environment:
       - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
       - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
-      - GITEA_RUNNER_NAME=docker-act-runner-1
-      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+      - GITEA_RUNNER_NAME=docker-act-runner-4
+      - GITEA_RUNNER_LABELS=pytorch-gpu:docker://pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime,ubuntu-latest:docker://pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
     restart: always
   act_runner-5:
     image: gitea/act_runner:latest
@@ -88,10 +116,17 @@ services:
     environment:
       - GITEA_INSTANCE_URL=http://192.168.100.20:3000/
       - GITEA_RUNNER_REGISTRATION_TOKEN=nwCVaXJdWDY5hL1VE051yzZydpucQYogr6ntfI67
-      - GITEA_RUNNER_NAME=docker-act-runner-1
-      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:16-bullseye,golang:docker://golang:1
+      - GITEA_RUNNER_NAME=docker-act-runner-5
+      - GITEA_RUNNER_LABELS=tensorflow-gpu:docker://tensorflow/tensorflow:latest-gpu,ubuntu-latest:docker://tensorflow/tensorflow:latest-gpu
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [ gpu ]
     restart: always
 
 volumes:

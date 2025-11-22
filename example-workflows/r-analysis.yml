@@ -1,0 +1,33 @@
+# Example workflow for R statistical analysis
+# Copy this to .gitea/workflows/compute.yml in your repository
+
+name: R Analysis
+on: [push]
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install R and packages
+        run: |
+          apt-get update && apt-get install -y r-base r-base-dev
+          # Install common packages
+          R -e "install.packages(c('ggplot2', 'dplyr', 'tidyr', 'readr'), repos='http://cran.rstudio.com/')"
+
+      - name: Run R script
+        run: Rscript analysis.R
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: r-results-${{ github.sha }}
+          path: |
+            *.png
+            *.pdf
+            *.csv
+            *.RData
+            plots/
+            output/

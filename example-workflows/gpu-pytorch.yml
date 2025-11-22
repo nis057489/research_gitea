@@ -1,0 +1,48 @@
+# Example workflow for GPU-accelerated deep learning with PyTorch
+# Copy this to .gitea/workflows/compute.yml in your repository
+
+name: GPU Training
+on: [push]
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install PyTorch with CUDA support
+        run: |
+          apt-get update && apt-get install -y python3 python3-pip wget
+          pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+          pip3 install numpy matplotlib tensorboard
+
+      - name: Verify GPU availability
+        run: |
+          python3 << 'EOF'
+          import torch
+          print(f"PyTorch version: {torch.__version__}")
+          print(f"CUDA available: {torch.cuda.is_available()}")
+          print(f"CUDA version: {torch.version.cuda}")
+          if torch.cuda.is_available():
+              print(f"GPU device: {torch.cuda.get_device_name(0)}")
+              print(f"Number of GPUs: {torch.cuda.device_count()}")
+          else:
+              print("WARNING: No GPU detected!")
+          EOF
+
+      - name: Run training script
+        run: python3 train.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: training-results-${{ github.sha }}
+          path: |
+            *.png
+            *.pt
+            *.pth
+            *.log
+            checkpoints/
+            logs/
+            results/

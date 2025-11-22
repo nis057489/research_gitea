@@ -1,0 +1,50 @@
+# Example for running long computations (hours/days)
+# This workflow handles long-running simulations or analyses
+
+name: Long Computation
+on: [push]
+
+jobs:
+  long-compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update && apt-get install -y python3 python3-pip
+          pip3 install numpy scipy pandas tqdm
+
+      - name: Run long computation with progress
+        run: |
+          python3 << 'EOF'
+          import time
+          from tqdm import tqdm
+
+          # Your long-running computation
+          results = []
+          for i in tqdm(range(1000)):
+              # Simulate computation
+              time.sleep(0.1)
+              results.append(i ** 2)
+
+              # Save intermediate results every 100 iterations
+              if i % 100 == 0:
+                  with open(f'checkpoint_{i}.txt', 'w') as f:
+                      f.write(str(results))
+
+          # Save final results
+          with open('final_results.txt', 'w') as f:
+              f.write(str(results))
+          print("Computation complete!")
+          EOF
+
+      - name: Upload all results (including checkpoints)
+        uses: actions/upload-artifact@v3
+        with:
+          name: computation-results-${{ github.sha }}
+          path: |
+            *.txt
+            *.log
+            checkpoint_*

@@ -1,0 +1,38 @@
+# Example workflow for Julia numerical computing
+# Copy this to .gitea/workflows/compute.yml in your repository
+
+name: Julia Computation
+on: [push]
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Julia
+        run: |
+          wget https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.0-linux-x86_64.tar.gz
+          tar xzf julia-1.10.0-linux-x86_64.tar.gz
+          export PATH="$PWD/julia-1.10.0/bin:$PATH"
+          echo "PATH=$PWD/julia-1.10.0/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Install Julia packages
+        run: |
+          julia -e 'using Pkg; Pkg.add(["Plots", "DataFrames", "CSV", "Statistics"])'
+
+      - name: Run Julia script
+        run: julia analysis.jl
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: julia-results-${{ github.sha }}
+          path: |
+            *.png
+            *.pdf
+            *.csv
+            *.jld2
+            results/
+            plots/
