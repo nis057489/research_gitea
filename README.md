@@ -66,13 +66,6 @@ docker compose down -v
 
   Warning: The `docker-compose.yml` includes `GITEA_RUNNER_REGISTRATION_TOKEN` environment values for runner services. Treat these tokens as secrets — rotate them if they are exposed.
 
-**Security & customization checklist**
-
-- Change default DB password in `docker-compose.yml` and update `config/app.ini` if you hardcode it there.
-- Secure the runner registration token(s): do not commit usable tokens publicly. If the token in `docker-compose.yml` is a live token, create a new one in your Gitea instance and replace it.
-- Set `GITEA__SECURITY__INSTALL_LOCK=true` (or through the UI) after finishing initial setup to prevent re-installation.
-- If exposing Gitea to the internet, configure TLS and set `REVERSE_PROXY_TRUSTED_PROXIES` appropriately (or run behind a reverse proxy).
-
 **Useful commands**
 
 - Start (detached):
@@ -97,3 +90,15 @@ docker compose exec gitea /bin/bash
 
 - Gitea app data: `./gitea` (mounted into `/var/lib/gitea` in the container).
 - Postgres data: `./pgdata` (mounted into Postgres container's data dir).
+
+**Security & customization checklist**
+
+This configuration is intended for local testing or trusted-network use only. It is NOT hardened for untrusted or public-facing deployments. Before running these services in any environment you don't control, harden the configuration by doing at minimum:
+
+- Change default DB password in `docker-compose.yml` and update `config/app.ini` if you hardcode it there.
+- Remove or rotate any published `GITEA_RUNNER_REGISTRATION_TOKEN` values and store secrets in a secure secrets manager.
+- Configure TLS (use a reverse proxy with valid certificates or enable HTTPS in front of Gitea) and set `ROOT_URL` to the secure address.
+- Harden Postgres access (non-default users/ports, network restrictions, backups) and secure host volumes.
+- Secure the runner registration token(s): do not commit usable tokens publicly. If the token in `docker-compose.yml` is a live token, create a new one in your Gitea instance and replace it.
+- Set `GITEA__SECURITY__INSTALL_LOCK=true` (or through the UI) after finishing initial setup to prevent re-installation.
+- If exposing Gitea to the internet, configure TLS and set `REVERSE_PROXY_TRUSTED_PROXIES` appropriately (or run behind a reverse proxy).
