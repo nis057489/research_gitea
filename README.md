@@ -453,3 +453,9 @@ To use NVIDIA GPU's your machine must have the `nvidia-container-toolkit` instal
     #           count: all
     #           capabilities: [ gpu ]
 ```
+
+If when starting the stack, you get an error similar to the following, then you probably need to verify that `nvidia-container-toolkit` is properly installed:
+
+```sh
+Error response from daemon: could not select device driver "nvidia" with capabilities: [[gpu]]
+```
